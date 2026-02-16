@@ -1,6 +1,7 @@
 <script lang="ts">
     import { routine } from '$lib/stores/routine';
     import { BookOpen, Sparkles, Gamepad2, CheckCircle2, Circle } from 'lucide-svelte';
+    import { base } from '$app/paths';
 
     // Subscribe to store
     // usage: $routine.currentPhase, $routine.reading.completed, etc.
@@ -24,7 +25,7 @@
             </div>
             <span class="label">Reading</span>
             {#if !$routine.reading.completed}
-                <a href="/reading" class="btn btn-primary action-btn">Start</a>
+                <a href="{base}/reading" class="btn btn-primary action-btn">Start</a>
             {/if}
         </div>
 
@@ -41,7 +42,7 @@
             </div>
             <span class="label">Hygiene</span>
             {#if $routine.reading.completed && !$routine.hygiene.completed}
-                <a href="/hygiene" class="btn btn-primary action-btn">Start</a>
+                <a href="{base}/hygiene" class="btn btn-primary action-btn">Start</a>
             {:else if !$routine.reading.completed}
                 <span class="status-text">Locked</span>
             {/if}
@@ -56,7 +57,7 @@
             </div>
             <span class="label">Games</span>
             {#if $routine.games.unlocked}
-                <a href="/games" class="btn btn-primary action-btn">Play!</a>
+                <a href="{base}/games" class="btn btn-primary action-btn">Play!</a>
             {:else}
                 <span class="status-text">Finish tasks first!</span>
             {/if}

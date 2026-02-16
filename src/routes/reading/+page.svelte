@@ -2,6 +2,7 @@
     import StoryReader from '$lib/components/StoryReader.svelte';
     import { routine } from '$lib/stores/routine';
     import { goto } from '$app/navigation';
+    import { base } from '$app/paths';
     import Confetti from 'js-confetti';
     import { onMount } from 'svelte';
 
@@ -38,7 +39,7 @@
         });
         // Wait a moment for celebration
         setTimeout(() => {
-            goto('/');
+            goto(`${base}/`);
         }, 2000);
     }
 </script>

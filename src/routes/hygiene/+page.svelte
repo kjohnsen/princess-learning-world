@@ -3,6 +3,7 @@
     import { Check, User, Droplets, Shirt } from 'lucide-svelte';
     import { fly, scale } from 'svelte/transition';
     import { goto } from '$app/navigation';
+    import { base } from '$app/paths';
     import Confetti from 'js-confetti';
     import { onMount } from 'svelte';
 
@@ -35,7 +36,7 @@
             routine.unlockGames(); // Unlock the games!
             setTimeout(async () => {
                 await jsConfetti.addConfetti();
-                setTimeout(() => goto('/'), 2000);
+                setTimeout(() => goto(`${base}/`), 2000);
             }, 500);
         }
     }

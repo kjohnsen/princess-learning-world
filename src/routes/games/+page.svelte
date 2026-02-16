@@ -3,10 +3,11 @@
     import { routine } from '$lib/stores/routine';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation'; // Import goto
+    import { base } from '$app/paths';
 
     onMount(() => {
        // Optional: Redirect if not unlocked
-       // if (!$routine.games.unlocked) goto('/');
+       // if (!$routine.games.unlocked) goto(`${base}/`);
     });
 </script>
 
@@ -14,7 +15,7 @@
     <header>
         <h1>Game Center</h1>
         <p>You did it! Time to play!</p>
-        <a href="/" class="btn btn-secondary back-btn">Back to Routine</a>
+        <a href="{base}/" class="btn btn-secondary back-btn">Back to Routine</a>
     </header>
 
     {#if $routine.games.unlocked}
@@ -26,7 +27,7 @@
         <div class="locked-message">
             <h2>Locked!</h2>
             <p>Complete your Reading and Hygiene lessons first!</p>
-            <a href="/" class="btn btn-primary">Go to Routine</a>
+            <a href="{base}/" class="btn btn-primary">Go to Routine</a>
         </div>
     {/if}
 </div>

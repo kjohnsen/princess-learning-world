@@ -104,6 +104,7 @@
             <button 
                 class="flower-interactive"
                 style="left: {flower.x}px; top: {flower.y}px;"
+                aria-label="Harvest flower"
                 on:click={(e) => harvestFlower(e, flower.id)}
             >
                 <div 
