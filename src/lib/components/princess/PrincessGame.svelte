@@ -17,6 +17,7 @@
     import GroceryStore from "./GroceryStore.svelte";
     import Kitchen from "./Kitchen.svelte";
     import PetStore from "./PetStore.svelte";
+    import Cathedral from "./Cathedral.svelte";
 
     let activeTab = "dressup";
 
