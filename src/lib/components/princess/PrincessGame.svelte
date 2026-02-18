@@ -2,6 +2,7 @@
     import {
         Castle as CastleIcon,
         Cat,
+        Church,
         Flower,
         Moon,
         ShoppingBag,
@@ -32,6 +33,12 @@
         },
         { id: "castle", label: "Castle", icon: CastleIcon, color: "#9C27B0" },
         { id: "bedroom", label: "Bedroom", icon: Moon, color: "#673AB7" },
+        {
+            id: "wedding",
+            label: "Imperial Wedding",
+            icon: Church,
+            color: "#FFD700",
+        },
     ];
 </script>
 
@@ -77,6 +84,10 @@
         {:else if activeTab === "grocerystore"}
             <div in:fade={{ duration: 300 }}>
                 <GroceryStore />
+            </div>
+        {:else if activeTab === "wedding"}
+            <div in:fade={{ duration: 300 }}>
+                <Cathedral />
             </div>
         {/if}
     </div>
