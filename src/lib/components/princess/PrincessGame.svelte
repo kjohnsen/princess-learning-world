@@ -6,6 +6,7 @@
         Castle as CastleIcon,
         Cat,
         Church,
+        Coffee,
         Flower,
         Moon,
         ShoppingBag,
@@ -24,6 +25,7 @@
     import PrinceAvatar from "./PrinceAvatar.svelte";
     import PrinceDressUp from "./PrinceDressUp.svelte";
     import PrincessAvatar from "./PrincessAvatar.svelte";
+    import Restaurant from "./Restaurant.svelte";
 
     let activeTab = "dressup";
 
@@ -69,6 +71,12 @@
             label: "Imperial Wedding",
             icon: Church,
             color: "#FFD700",
+        },
+        {
+            id: "restaurant",
+            label: "Restaurant",
+            icon: Coffee,
+            color: "#FF5722",
         },
     ];
 </script>
@@ -123,6 +131,10 @@
         {:else if activeTab === "wedding"}
             <div in:fade={{ duration: 300 }}>
                 <Cathedral />
+            </div>
+        {:else if activeTab === "restaurant"}
+            <div in:fade={{ duration: 300 }}>
+                <Restaurant />
             </div>
         {/if}
     </div>
