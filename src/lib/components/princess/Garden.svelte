@@ -1,9 +1,6 @@
 <script lang="ts">
     import { inventory } from "$lib/stores/inventory";
-    import { princessState } from "$lib/stores/princessState";
     import { scale } from "svelte/transition";
-    import PrinceAvatar from "./PrinceAvatar.svelte";
-    import PrincessAvatar from "./PrincessAvatar.svelte";
 
     // Simple flower data structure
     type Flower = {
@@ -91,22 +88,6 @@
         <div class="cloud c2"></div>
     </div>
     <div class="grass">
-        <div class="avatars-layer">
-            <div class="princess-pos">
-                <PrincessAvatar
-                    skinTone={$princessState.skinTone}
-                    dressId={$princessState.dress}
-                    hairId={$princessState.hair}
-                    crownId={$princessState.crown}
-                    makeupId={$princessState.makeup}
-                    scale={0.5}
-                />
-            </div>
-            <div class="prince-pos">
-                <PrinceAvatar scale={0.5} />
-            </div>
-        </div>
-
         <div class="instruction">
             Tap grass to plant. Tap flower to harvest (+10💰)!
         </div>
@@ -205,25 +186,6 @@
         height: 60%;
         position: relative;
         z-index: 1;
-    }
-
-    .avatars-layer {
-        position: absolute;
-        bottom: 20px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        pointer-events: none;
-        z-index: 0; /* Behind flowers */
-    }
-
-    .princess-pos {
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-    }
-
-    .prince-pos {
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
     }
 
     .instruction {

@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { draggable } from "$lib/actions/draggable";
+    import { princessState } from "$lib/stores/princessState";
+    import { princeState } from "$lib/stores/princeState";
     import {
         Castle as CastleIcon,
         Cat,
@@ -12,17 +15,44 @@
     import { fade } from "svelte/transition";
     import Bedroom from "./Bedroom.svelte";
     import Castle from "./Castle.svelte";
+    import Cathedral from "./Cathedral.svelte";
     import DressUp from "./DressUp.svelte";
     import Garden from "./Garden.svelte";
     import GroceryStore from "./GroceryStore.svelte";
     import Kitchen from "./Kitchen.svelte";
     import PetStore from "./PetStore.svelte";
-    import Cathedral from "./Cathedral.svelte";
+    import PrinceAvatar from "./PrinceAvatar.svelte";
+    import PrinceDressUp from "./PrinceDressUp.svelte";
+    import PrincessAvatar from "./PrincessAvatar.svelte";
 
     let activeTab = "dressup";
 
+    let princessPos = { x: 50, y: 350 };
+    let princePos = { x: 150, y: 350 };
+
+    function handlePrincessDrag(event: CustomEvent) {
+        princessPos.x += event.detail.dx;
+        princessPos.y += event.detail.dy;
+    }
+
+    function handlePrinceDrag(event: CustomEvent) {
+        princePos.x += event.detail.dx;
+        princePos.y += event.detail.dy;
+    }
+
     const tabs = [
-        { id: "dressup", label: "Dress Up", icon: Sparkles, color: "#FF6B97" },
+        {
+            id: "dressup",
+            label: "Princess Dress Up",
+            icon: Sparkles,
+            color: "#FF6B97",
+        },
+        {
+            id: "princedressup",
+            label: "Prince Dress Up",
+            icon: Sparkles,
+            color: "#3B82F6",
+        },
         { id: "garden", label: "Garden", icon: Flower, color: "#4CAF50" },
         { id: "kitchen", label: "Kitchen", icon: Utensils, color: "#FF9800" },
         { id: "petstore", label: "Pet Store", icon: Cat, color: "#9C27B0" },
@@ -62,6 +92,10 @@
             <div in:fade={{ duration: 300 }}>
                 <DressUp />
             </div>
+        {:else if activeTab === "princedressup"}
+            <div in:fade={{ duration: 300 }}>
+                <PrinceDressUp />
+            </div>
         {:else if activeTab === "garden"}
             <div in:fade={{ duration: 300 }}>
                 <Garden />
@@ -91,6 +125,41 @@
                 <Cathedral />
             </div>
         {/if}
+    </div>
+
+    <div
+        class="global-avatar"
+        style="left: {princessPos.x}px; top: {princessPos.y}px;"
+        use:draggable
+        on:dragmove={handlePrincessDrag}
+    >
+        <PrincessAvatar
+            skinTone={$princessState.skinTone}
+            dressId={$princessState.dress}
+            hairId={$princessState.hair}
+            hairCutId={$princessState.hairCut}
+            crownId={$princessState.crown}
+            makeup={$princessState.makeup}
+            scale={0.45}
+        />
+    </div>
+
+    <div
+        class="global-avatar prince-avatar-global"
+        style="left: {princePos.x}px; top: {princePos.y}px;"
+        use:draggable
+        on:dragmove={handlePrinceDrag}
+    >
+        <PrinceAvatar
+            skinTone={$princeState.skinTone}
+            hairId={$princeState.hair}
+            hairCutId={$princeState.hairCut}
+            shirtId={$princeState.shirt}
+            pantsId={$princeState.pants}
+            capeId={$princeState.cape}
+            crownId={$princeState.crown}
+            scale={0.45}
+        />
     </div>
 </div>
 
@@ -153,5 +222,25 @@
         box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
         position: relative;
         overflow: hidden;
+    }
+
+    .global-avatar {
+        position: absolute;
+        z-index: 100;
+        transform-origin: center center;
+        pointer-events: none;
+    }
+
+    :global(.global-avatar svg) {
+        pointer-events: none;
+    }
+
+    :global(.global-avatar svg *) {
+        pointer-events: visiblePainted;
+        cursor: grab;
+    }
+
+    :global(.global-avatar:active svg *) {
+        cursor: grabbing;
     }
 </style>

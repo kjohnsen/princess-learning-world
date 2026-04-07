@@ -10,4 +10,10 @@ declare global {
 	}
 }
 
-export {};
+export { };
+
+declare namespace svelteHTML {
+	interface HTMLAttributes<T> {
+		'on:dragmove'?: (event: CustomEvent<any>) => void;
+	}
+}

@@ -1,34 +1,83 @@
 <script lang="ts">
-    import { fade, scale } from 'svelte/transition';
-    import { inventory } from '$lib/stores/inventory';
-    import { dresses, hairStyles, crowns, makeupStyles } from '$lib/stores/princessState';
-    import { ShoppingBag, Coins } from 'lucide-svelte';
+    import { inventory } from "$lib/stores/inventory";
+    import {
+        blushes,
+        crowns,
+        dresses,
+        lipsticks,
+        polishes,
+        shadows,
+    } from "$lib/stores/princessState";
+    import {
+        princeCapes,
+        princeCrowns,
+        princePants,
+        princeShirts,
+    } from "$lib/stores/princeState";
+    import { Coins } from "lucide-svelte";
 
     // Combine all purchasable items
     const foodItems = [
-        { id: 'carrot', name: 'Carrot 🥕', price: 5, category: 'food' },
-        { id: 'pet_food', name: 'Pet Food 🦴', price: 10, category: 'food' },
-        { id: 'cake_kit', name: 'Cake Kit 🎂', price: 20, category: 'food' } // Bundle of ingredients?
+        { id: "carrot", name: "Carrot 🥕", price: 5, category: "food" },
+        { id: "pet_food", name: "Pet Food 🦴", price: 10, category: "food" },
+        { id: "cake_kit", name: "Cake Kit 🎂", price: 20, category: "food" }, // Bundle of ingredients?
     ];
 
     // Helper to format store items from state
-    const fashionItems = [
-        ...dresses.filter(d => d.price > 0).map(d => ({ ...d, category: 'fashion', type: 'dress' })),
-        ...crowns.filter(c => c.price > 0).map(c => ({ ...c, category: 'fashion', type: 'crown' })),
-        ...makeupStyles.filter(m => m.price > 0).map(m => ({ ...m, category: 'fashion', type: 'makeup' }))
+    const princessFashionItems = [
+        ...dresses
+            .filter((d) => d.price > 0)
+            .map((d) => ({ ...d, category: "fashion", type: "dress" })),
+        ...crowns
+            .filter((c) => c.price > 0)
+            .map((c) => ({ ...c, category: "fashion", type: "crown" })),
+        ...blushes
+            .filter((m) => m.price > 0)
+            .map((m) => ({ ...m, category: "fashion", type: "blush" })),
+        ...shadows
+            .filter((m) => m.price > 0)
+            .map((m) => ({ ...m, category: "fashion", type: "shadow" })),
+        ...lipsticks
+            .filter((m) => m.price > 0)
+            .map((m) => ({ ...m, category: "fashion", type: "lipstick" })),
+        ...polishes
+            .filter((m) => m.price > 0)
+            .map((m) => ({ ...m, category: "fashion", type: "polish" })),
     ];
 
-    let activeCategory = 'all';
+    const princeFashionItems = [
+        ...princeShirts
+            .filter((d) => d.price > 0)
+            .map((d) => ({ ...d, category: "princeShirt", type: "shirt" })),
+        ...princePants
+            .filter((d) => d.price > 0)
+            .map((d) => ({ ...d, category: "princePants", type: "pants" })),
+        ...princeCapes
+            .filter((d) => d.price > 0)
+            .map((d) => ({ ...d, category: "princeCape", type: "cape" })),
+        ...princeCrowns
+            .filter((d) => d.price > 0)
+            .map((d) => ({ ...d, category: "princeCrown", type: "crown" })),
+    ];
+
+    let activeCategory = "princess";
 
     function buyItem(item: any) {
         if ($inventory.coins >= item.price) {
             // Use store methods for reactivity!
             inventory.spendCoins(item.price);
-            
+
             // Construct ID based on source
             let itemId = item.id;
-            if (item.category === 'fashion') {
+            if (item.category === "fashion") {
                 itemId = `${item.type}_${item.id}`;
+            } else if (
+                item.category === "princeShirt" ||
+                item.category === "princePants" ||
+                item.category === "princeCape" ||
+                item.category === "princeCrown"
+            ) {
+                itemId = `${item.category}_${item.id}`;
             }
 
             // Add to inventory store
@@ -41,8 +90,15 @@
 
     function isOwned(item: any) {
         let itemId = item.id;
-        if (item.category === 'fashion') {
-             itemId = `${item.type}_${item.id}`;
+        if (item.category === "fashion") {
+            itemId = `${item.type}_${item.id}`;
+        } else if (
+            item.category === "princeShirt" ||
+            item.category === "princePants" ||
+            item.category === "princeCape" ||
+            item.category === "princeCrown"
+        ) {
+            itemId = `${item.category}_${item.id}`;
         }
         return $inventory.ownedItems.includes(itemId);
     }
@@ -50,68 +106,123 @@
 
 <div class="store-container">
     <div class="header">
-        <h2>Grocery Store</h2>
+        <h2>Store</h2>
         <div class="wallet">
             <Coins size={24} color="#FFD700" />
             <span class="coin-count">{$inventory.coins}</span>
         </div>
     </div>
 
-    <div class="shelves">
-        {#each fashionItems as item}
-            <div class="item-card {isOwned(item) ? 'owned' : ''}">
-                <div class="item-icon" style="background-color: {item.color || item.shadow || '#eee'}">
-                    {#if item.type === 'makeup'}
-                        💄
-                    {:else if item.type === 'crown'}
-                        👑
-                    {:else}
-                        👗
-                    {/if}
-                </div>
-                <div class="item-info">
-                    <span class="name">{item.name}</span>
-                    <span class="price">
-                        {isOwned(item) ? 'Owned' : `${item.price} 💰`}
-                    </span>
-                </div>
-                <button 
-                    class="buy-btn" 
-                    disabled={isOwned(item) || $inventory.coins < item.price}
-                    on:click={() => buyItem(item)}
-                >
-                    {isOwned(item) ? 'Purchased' : 'Buy'}
-                </button>
-            </div>
-        {/each}
+    <div class="category-tabs">
+        <button
+            class="cat-tab {activeCategory === 'princess' ? 'active' : ''}"
+            on:click={() => (activeCategory = "princess")}>Princess</button
+        >
+        <button
+            class="cat-tab {activeCategory === 'prince' ? 'active' : ''}"
+            on:click={() => (activeCategory = "prince")}>Prince</button
+        >
+        <button
+            class="cat-tab {activeCategory === 'misc' ? 'active' : ''}"
+            on:click={() => (activeCategory = "misc")}>Miscellaneous</button
+        >
+    </div>
 
-        {#each foodItems as item}
-             <div class="item-card {isOwned(item) ? 'owned' : ''}">
-                <div class="item-icon food-icon">
-                    {item.name.split(' ')[1]}
+    <div class="shelves">
+        {#if activeCategory === "princess"}
+            {#each princessFashionItems as item}
+                <div class="item-card {isOwned(item) ? 'owned' : ''}">
+                    <div
+                        class="item-icon"
+                        style="background-color: {item.color || '#eee'}"
+                    >
+                        {#if item.type === "blush" || item.type === "shadow" || item.type === "lipstick" || item.type === "polish"}
+                            💄
+                        {:else if item.type === "crown"}
+                            👑
+                        {:else}
+                            👗
+                        {/if}
+                    </div>
+                    <div class="item-info">
+                        <span class="name">{item.name}</span>
+                        <span class="price">
+                            {isOwned(item) ? "Owned" : `${item.price} 💰`}
+                        </span>
+                    </div>
+                    <button
+                        class="buy-btn"
+                        disabled={isOwned(item) ||
+                            $inventory.coins < item.price}
+                        on:click={() => buyItem(item)}
+                    >
+                        {isOwned(item) ? "Purchased" : "Buy"}
+                    </button>
                 </div>
-                <div class="item-info">
-                    <span class="name">{item.name.split(' ')[0]}</span>
-                    <span class="price">
-                        {isOwned(item) ? 'Owned' : `${item.price} 💰`}
-                    </span>
+            {/each}
+        {:else if activeCategory === "prince"}
+            {#each princeFashionItems as item}
+                <div class="item-card {isOwned(item) ? 'owned' : ''}">
+                    <div
+                        class="item-icon"
+                        style="background-color: {item.color || '#eee'}"
+                    >
+                        {#if item.type === "crown"}
+                            👑
+                        {:else if item.type === "cape"}
+                            🦸
+                        {:else if item.type === "shirt"}
+                            👕
+                        {:else if item.type === "pants"}
+                            👖
+                        {/if}
+                    </div>
+                    <div class="item-info">
+                        <span class="name">{item.name}</span>
+                        <span class="price">
+                            {isOwned(item) ? "Owned" : `${item.price} 💰`}
+                        </span>
+                    </div>
+                    <button
+                        class="buy-btn"
+                        disabled={isOwned(item) ||
+                            $inventory.coins < item.price}
+                        on:click={() => buyItem(item)}
+                    >
+                        {isOwned(item) ? "Purchased" : "Buy"}
+                    </button>
                 </div>
-                <button 
-                    class="buy-btn" 
-                    disabled={isOwned(item) || $inventory.coins < item.price}
-                    on:click={() => buyItem(item)}
-                >
-                    {isOwned(item) ? 'Purchased' : 'Buy'}
-                </button>
-            </div>
-        {/each}
+            {/each}
+        {:else if activeCategory === "misc"}
+            {#each foodItems as item}
+                <div class="item-card {isOwned(item) ? 'owned' : ''}">
+                    <div class="item-icon food-icon">
+                        {item.name.split(" ")[1]}
+                    </div>
+                    <div class="item-info">
+                        <span class="name">{item.name.split(" ")[0]}</span>
+                        <span class="price">
+                            {isOwned(item) ? "Owned" : `${item.price} 💰`}
+                        </span>
+                    </div>
+                    <button
+                        class="buy-btn"
+                        disabled={isOwned(item) ||
+                            $inventory.coins < item.price}
+                        on:click={() => buyItem(item)}
+                    >
+                        {isOwned(item) ? "Purchased" : "Buy"}
+                    </button>
+                </div>
+            {/each}
+        {/if}
     </div>
 </div>
 
 <style>
     .store-container {
         padding: 20px;
-        background: #F8F9FA;
+        background: #f8f9fa;
         border-radius: 20px;
         height: 500px;
         overflow-y: auto;
@@ -123,18 +234,18 @@
         align-items: center;
         margin-bottom: 20px;
         padding-bottom: 20px;
-        border-bottom: 2px solid #E9ECEF;
+        border-bottom: 2px solid #e9ecef;
     }
 
     .wallet {
-        background: #FFF;
+        background: #fff;
         padding: 10px 20px;
         border-radius: 30px;
         display: flex;
         align-items: center;
         gap: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        border: 2px solid #FFD700;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border: 2px solid #ffd700;
         font-weight: bold;
         font-size: 1.2rem;
     }
@@ -153,12 +264,16 @@
         flex-direction: column;
         gap: 10px;
         align-items: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         transition: transform 0.2s;
     }
-    
-    .item-card:hover { transform: translateY(-3px); }
-    .item-card.owned { opacity: 0.7; }
+
+    .item-card:hover {
+        transform: translateY(-3px);
+    }
+    .item-card.owned {
+        opacity: 0.7;
+    }
 
     .item-icon {
         width: 60px;
@@ -168,10 +283,12 @@
         align-items: center;
         justify-content: center;
         font-size: 2rem;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
     }
-    
-    .food-icon { background: #FFF3E0; }
+
+    .food-icon {
+        background: #fff3e0;
+    }
 
     .item-info {
         text-align: center;
@@ -179,8 +296,15 @@
         flex-direction: column;
     }
 
-    .name { font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; }
-    .price { font-size: 0.9rem; color: #666; }
+    .name {
+        font-weight: bold;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+    .price {
+        font-size: 0.9rem;
+        color: #666;
+    }
 
     .buy-btn {
         width: 100%;
@@ -194,7 +318,7 @@
     }
 
     .buy-btn:disabled {
-        background: #CCC;
+        background: #ccc;
         cursor: not-allowed;
     }
 </style>

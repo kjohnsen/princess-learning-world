@@ -6,7 +6,13 @@ export interface PrincessState {
     hair: number;
     accessory: number;
     crown: number;
-    makeup: number;
+    makeup: {
+        blush: number;
+        shadow: number;
+        lipstick: number;
+        polish: number;
+    };
+    hairCut: number;
 }
 
 const initialState: PrincessState = {
@@ -15,13 +21,26 @@ const initialState: PrincessState = {
     hair: 0,
     accessory: 0,
     crown: 0,
-    makeup: 0
+    makeup: {
+        blush: 0,
+        shadow: 0,
+        lipstick: 0,
+        polish: 0
+    },
+    hairCut: 0
 };
 
 function createPrincessState() {
     // Load from localStorage if available
     const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('princess_state') : null;
     const startState = stored ? JSON.parse(stored) : initialState;
+
+    if (startState.makeup && typeof startState.makeup === 'number') {
+        startState.makeup = { blush: 0, shadow: 0, lipstick: 0, polish: 0 };
+    }
+    if (startState.hairCut === undefined) {
+        startState.hairCut = 0;
+    }
 
     const { subscribe, set, update } = writable<PrincessState>(startState);
 
@@ -53,6 +72,12 @@ export const hairStyles = [
     { id: 3, name: 'Red', color: '#EF4444', price: 0 },
 ];
 
+export const hairCuts = [
+    { id: 0, name: 'Natural Long', price: 0 },
+    { id: 1, name: 'Short Bob', price: 0 },
+    { id: 2, name: 'High Bun', price: 0 },
+];
+
 export const crowns = [
     { id: 0, name: 'None', color: 'transparent', price: 0 },
     { id: 1, name: 'Gold Crown', color: '#FFD700', price: 50 },
@@ -60,8 +85,27 @@ export const crowns = [
     { id: 3, name: 'Floral Wreath', color: '#8BC34A', price: 25 }
 ];
 
-export const makeupStyles = [
-    { id: 0, name: 'Natural', blush: 'transparent', shadow: 'transparent', price: 0 },
-    { id: 1, name: 'Rosy', blush: 'rgba(255, 105, 180, 0.3)', shadow: 'transparent', price: 30 },
-    { id: 2, name: 'Glam', blush: 'rgba(255, 105, 180, 0.4)', shadow: 'rgba(128, 0, 128, 0.2)', price: 60 },
+export const blushes = [
+    { id: 0, name: 'Natural', color: 'transparent', price: 0 },
+    { id: 1, name: 'Rosy', color: 'rgba(255, 105, 180, 0.3)', price: 30 },
+    { id: 2, name: 'Peach', color: 'rgba(255, 180, 150, 0.4)', price: 30 },
+];
+
+export const shadows = [
+    { id: 0, name: 'Natural', color: 'transparent', price: 0 },
+    { id: 1, name: 'Glam', color: 'rgba(128, 0, 128, 0.2)', price: 40 },
+    { id: 2, name: 'Ocean', color: 'rgba(0, 191, 255, 0.3)', price: 40 },
+];
+
+export const lipsticks = [
+    { id: 0, name: 'Natural', color: 'transparent', price: 0 },
+    { id: 1, name: 'Ruby', color: 'rgba(255, 0, 50, 0.8)', price: 35 },
+    { id: 2, name: 'Pink', color: 'rgba(255, 105, 180, 0.8)', price: 35 },
+];
+
+export const polishes = [
+    { id: 0, name: 'Natural', color: 'transparent', price: 0 },
+    { id: 1, name: 'Pink', color: '#FF6B97', price: 20 },
+    { id: 2, name: 'Crimson', color: '#DC143C', price: 20 },
+    { id: 3, name: 'Teal', color: '#008080', price: 20 },
 ];
