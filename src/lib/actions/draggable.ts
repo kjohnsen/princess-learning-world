@@ -1,6 +1,6 @@
 export function draggable(node: HTMLElement) {
-    let x;
-    let y;
+    let x = 0;
+    let y = 0;
 
     function handleMousedown(event: MouseEvent | TouchEvent) {
         if (event.type === 'touchstart') {

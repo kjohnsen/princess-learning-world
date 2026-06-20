@@ -13,7 +13,7 @@
         jsConfetti = new Confetti();
     });
 
-    const icons = {
+    const icons: Record<string, any> = {
         teeth: User, // Using User as a proxy for face/teeth if specific icon missing, or Smile
         wash: Droplets,
         pajamas: Shirt

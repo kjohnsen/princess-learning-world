@@ -12,8 +12,10 @@ declare global {
 
 export { };
 
-declare namespace svelteHTML {
+declare module 'svelte/elements' {
 	interface HTMLAttributes<T> {
-		'on:dragmove'?: (event: CustomEvent<any>) => void;
+		'on:dragmove'?: (event: any) => void;
+		'on:dragstart'?: (event: any) => void;
+		'on:dragend'?: (event: any) => void;
 	}
 }

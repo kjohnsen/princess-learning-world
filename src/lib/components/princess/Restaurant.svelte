@@ -70,7 +70,7 @@
             class="food-item"
             style="left: {food.x}px; top: {food.y}px;"
             use:draggable
-            on:dragmove={(e) => handleFoodDrag(e, food.id)}
+            on:dragmove={(e: any) => handleFoodDrag(e, food.id)}
         >
             {food.icon}
         </div>

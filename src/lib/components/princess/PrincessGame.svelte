@@ -9,6 +9,7 @@
     import Hospital from "./Hospital.svelte";
     import BabyDressUp from "./BabyDressUp.svelte";
     import BabyAvatar from "./BabyAvatar.svelte";
+    import FamilyPlanning from "./FamilyPlanning.svelte";
     import { babiesStore } from "$lib/stores/babyState";
     import {
         Castle as CastleIcon,
@@ -22,6 +23,7 @@
         Utensils,
         Baby,
         HeartPulse,
+        Users,
     } from "lucide-svelte";
     import { fade } from "svelte/transition";
     import Bedroom from "./Bedroom.svelte";
@@ -85,6 +87,12 @@
             color: "#FF8DA1",
         },
         {
+            id: "familyplanning",
+            label: "Family Planning",
+            icon: Users,
+            color: "#9C27B0",
+        },
+        {
             id: "hospital",
             label: "Hospital",
             icon: HeartPulse,
@@ -143,6 +151,10 @@
             {:else if activeTab === "babydressup"}
                 <div in:fade={{ duration: 300 }}>
                     <BabyDressUp />
+                </div>
+            {:else if activeTab === "familyplanning"}
+                <div in:fade={{ duration: 300 }}>
+                    <FamilyPlanning />
                 </div>
             {:else if activeTab === "hospital"}
                 <div in:fade={{ duration: 300 }}>
@@ -233,6 +245,7 @@
                         accessory={baby.accessory}
                         eyesClosed={baby.eyesClosed}
                         gender={baby.gender}
+                        ageGroup={baby.ageGroup}
                         scale={1}
                     />
                     <span class="baby-name-label">{baby.name}</span>

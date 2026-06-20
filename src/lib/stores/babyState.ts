@@ -1,79 +1,53 @@
 import { writable } from 'svelte/store';
 
-export interface BabyConfig {
+export interface ChildConfig {
     id: number;
     name: string;
     gender: 'girl' | 'boy';
-    isTwin: boolean;
+    ageGroup: 'baby' | 'kid' | 'teenager';
     swaddleColor: string;
-    clothing: 'onesie' | 'dress' | 'sanfermin';
-    shoe: 'barefoot' | 'booties' | 'sanfermin';
+    clothing: 'onesie' | 'dress' | 'sanfermin' | 'tshirt' | 'pants';
+    shoe: 'barefoot' | 'booties' | 'sneakers' | 'sanfermin';
     accessory: 'none' | 'hairbow' | 'cap' | 'bandana';
     eyesClosed: boolean;
     x: number;
     y: number;
 }
 
-export const initialBabies: BabyConfig[] = [
+export const initialChildren: ChildConfig[] = [
     {
         id: 1,
         name: "Baby Lily",
         gender: "girl",
-        isTwin: true,
+        ageGroup: "baby",
         swaddleColor: "#FFB6C1",
         clothing: "onesie",
         shoe: "barefoot",
         accessory: "hairbow",
         eyesClosed: false,
-        x: 230,
+        x: 250,
         y: 390
     },
     {
         id: 2,
-        name: "Baby Mia",
-        gender: "girl",
-        isTwin: true,
-        swaddleColor: "#E0B0FF",
-        clothing: "dress",
-        shoe: "booties",
-        accessory: "hairbow",
-        eyesClosed: true,
-        x: 280,
-        y: 390
-    },
-    {
-        id: 3,
-        name: "Baby Leo",
+        name: "Kid Leo",
         gender: "boy",
-        isTwin: true,
+        ageGroup: "kid",
         swaddleColor: "#ADD8E6",
-        clothing: "onesie",
-        shoe: "barefoot",
+        clothing: "tshirt",
+        shoe: "sneakers",
         accessory: "cap",
         eyesClosed: false,
-        x: 330,
-        y: 390
-    },
-    {
-        id: 4,
-        name: "Baby Max",
-        gender: "boy",
-        isTwin: true,
-        swaddleColor: "#98FB98",
-        clothing: "onesie",
-        shoe: "booties",
-        accessory: "none",
-        eyesClosed: true,
-        x: 380,
+        x: 350,
         y: 390
     }
 ];
 
 function createBabyStore() {
     const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('princess_babies') : null;
-    const startState = stored ? JSON.parse(stored) : initialBabies;
+    const startState = stored ? JSON.parse(stored) : initialChildren;
 
-    const { subscribe, set, update } = writable<BabyConfig[]>(startState);
+    const { subscribe, set, update } = writable<ChildConfig[]>(startState);
 
     if (typeof localStorage !== 'undefined') {
         subscribe(val => localStorage.setItem('princess_babies', JSON.stringify(val)));
@@ -83,14 +57,36 @@ function createBabyStore() {
         subscribe,
         set,
         update,
-        updateBaby: (id: number, config: Partial<BabyConfig>) => update(babies => {
+        updateBaby: (id: number, config: Partial<ChildConfig>) => update(babies => {
             return babies.map(b => b.id === id ? { ...b, ...config } : b);
         }),
         updatePosition: (id: number, dx: number, dy: number) => update(babies => {
             return babies.map(b => b.id === id ? { ...b, x: b.x + dx, y: b.y + dy } : b);
         }),
-        reset: () => set(initialBabies)
+        addChild: (ageGroup: 'baby' | 'kid' | 'teenager', gender: 'girl' | 'boy') => update(babies => {
+            const newId = babies.length > 0 ? Math.max(...babies.map(b => b.id)) + 1 : 1;
+            const newChild: ChildConfig = {
+                id: newId,
+                name: `${ageGroup.charAt(0).toUpperCase() + ageGroup.slice(1)} ${newId}`,
+                gender: gender,
+                ageGroup: ageGroup,
+                swaddleColor: gender === 'girl' ? '#FFB6C1' : '#ADD8E6',
+                clothing: ageGroup === 'baby' ? 'onesie' : 'tshirt',
+                shoe: ageGroup === 'baby' ? 'barefoot' : 'sneakers',
+                accessory: 'none',
+                eyesClosed: false,
+                x: 200 + Math.random() * 300,
+                y: 390
+            };
+            return [...babies, newChild];
+        }),
+        removeChild: (id: number) => update(babies => {
+            return babies.filter(b => b.id !== id);
+        }),
+        reset: () => set(initialChildren)
     };
 }
 
 export const babiesStore = createBabyStore();
+export const childrenStore = babiesStore; // Alias for semantic clarity
+export type ChildConfigType = ChildConfig;

@@ -30,13 +30,17 @@
         }
     }
 
+    import { babiesStore } from "$lib/stores/babyState";
+
     // Dialogue text when talking to the doctor
-    let doctorDialogue = "Hello! All four babies are doing wonderful today! Let's give them a check-up! 🩺";
-    const dialogueOptions = [
-        "Hello! All four babies are doing wonderful today! Let's give them a check-up! 🩺",
-        "The twin sisters and twin brothers are so healthy and happy! 👶👶👶👶",
-        "Drag the babies onto the baby scale to weigh them! ⚖️",
-        "San Fermin festival is starting! Dress the babies in their white outfits and red sashes! 🧣"
+    let doctorDialogue = "Hello! Let's give the children a check-up! 🩺";
+    $: dialogueOptions = [
+        "Hello! Let's give the children a check-up! 🩺",
+        $babiesStore.length > 0
+            ? `We have ${$babiesStore.length} wonderful child(ren) to care for today!`
+            : "No children configured yet. Go to Family Planning to add some!",
+        "Drag the children onto the check-up table to examine or weigh them! ⚖️",
+        "Dress them in San Fermín style for the festival! White clothes and red sashes! 🧣"
     ];
 
     let currentDialogueIndex = 0;
@@ -83,45 +87,25 @@
 
         <!-- Welcome Baby Banner -->
         <div class="baby-banner">
-            🎉 Congratulations Twins! 🎉
+            🎉 Welcome to the Pediatric Clinic! 🎉
         </div>
     </div>
 
-    <!-- Bassinets/Cribs for the 4 babies -->
-    <div class="bassinets-row">
-        <div class="bassinet twin-girl">
-            <div class="hood"></div>
-            <div class="pillow"></div>
-            <div class="blanket"></div>
-            <span class="label">Lily's Bassinet</span>
-        </div>
-        <div class="bassinet twin-girl">
-            <div class="hood"></div>
-            <div class="pillow"></div>
-            <div class="blanket"></div>
-            <span class="label">Mia's Bassinet</span>
-        </div>
-        <div class="bassinet twin-boy">
-            <div class="hood"></div>
-            <div class="pillow"></div>
-            <div class="blanket"></div>
-            <span class="label">Leo's Bassinet</span>
-        </div>
-        <div class="bassinet twin-boy">
-            <div class="hood"></div>
-            <div class="pillow"></div>
-            <div class="blanket"></div>
-            <span class="label">Max's Bassinet</span>
-        </div>
+    <!-- One Bassinet -->
+    <div class="bassinet neutral-bassinet">
+        <div class="hood"></div>
+        <div class="pillow"></div>
+        <div class="blanket"></div>
+        <span class="label">Bassinet 👶</span>
     </div>
 
-    <!-- Scale for babies -->
-    <button class="baby-scale {scaleActive ? 'active' : ''}" on:click={handleScaleClick}>
-        <div class="scale-tray"></div>
+    <!-- One Check-up Table & Scale -->
+    <button class="checkup-table {scaleActive ? 'active' : ''}" on:click={handleScaleClick}>
+        <div class="table-tray"></div>
         <div class="scale-base">
             <span class="weight-display">{scaleWeight} kg</span>
         </div>
-        <span class="scale-label">Baby Scale ⚖️</span>
+        <span class="scale-label">Check-up Table ⚖️</span>
     </button>
 
     <!-- Floor -->
@@ -249,33 +233,17 @@
         box-shadow: 0 3px 6px rgba(0,0,0,0.05);
     }
 
-    .bassinets-row {
+    .neutral-bassinet {
         position: absolute;
         bottom: 70px;
-        left: 20px;
-        width: calc(100% - 250px);
-        display: flex;
-        justify-content: space-around;
-        z-index: 2;
-    }
-
-    .bassinet {
-        width: 90px;
-        height: 120px;
-        background: white;
+        left: 100px;
+        width: 100px;
+        height: 130px;
+        background: #FFFDE7; /* Soft cream/yellow */
         border-radius: 15px;
-        border: 4px solid #B0BEC5;
-        position: relative;
+        border: 4px solid #FFF59D;
         box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    }
-
-    .bassinet.twin-girl {
-        border-color: #F8BBD0;
-        background: #FFF0F5;
-    }
-    .bassinet.twin-boy {
-        border-color: #B3E5FC;
-        background: #E8F5E9;
+        z-index: 2;
     }
 
     .hood {
@@ -283,20 +251,18 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 40px;
+        height: 45px;
         border-radius: 11px 11px 0 0;
-        background: rgba(0,0,0,0.03);
+        background: #FFF59D;
         border-bottom: 2px solid rgba(0,0,0,0.05);
     }
-    .bassinet.twin-girl .hood { background: #FFD1DC; }
-    .bassinet.twin-boy .hood { background: #B2EBF2; }
 
     .pillow {
         position: absolute;
         top: 15px;
         left: 50%;
         transform: translateX(-50%);
-        width: 60px;
+        width: 70px;
         height: 25px;
         background: white;
         border-radius: 6px;
@@ -308,12 +274,10 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 60px;
+        height: 70px;
         border-radius: 0 0 11px 11px;
-        background: #CFD8DC;
+        background: #FFF9C4;
     }
-    .bassinet.twin-girl .blanket { background: #F8BBD0; }
-    .bassinet.twin-boy .blanket { background: #B3E5FC; }
 
     .label {
         position: absolute;
@@ -330,11 +294,11 @@
         border: 1px solid #E5E7EB;
     }
 
-    .baby-scale {
+    .checkup-table {
         position: absolute;
-        bottom: 40px;
-        right: 20px;
-        width: 120px;
+        bottom: 60px;
+        left: 270px;
+        width: 170px;
         background: none;
         border: none;
         display: flex;
@@ -342,34 +306,35 @@
         align-items: center;
         z-index: 2;
         padding: 0;
+        cursor: pointer;
     }
 
-    .scale-tray {
-        width: 100px;
-        height: 20px;
-        background: #CFD8DC;
-        border-radius: 20px 20px 0 0;
-        border: 2px solid #90A4AE;
+    .table-tray {
+        width: 160px;
+        height: 22px;
+        background: #ECEFF1;
+        border-radius: 8px 8px 0 0;
+        border: 3px solid #B0BEC5;
     }
 
     .scale-base {
-        width: 70px;
-        height: 50px;
-        background: #90A4AE;
-        border-radius: 0 0 10px 10px;
+        width: 120px;
+        height: 60px;
+        background: #B0BEC5;
+        border-radius: 0 0 12px 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid #78909C;
+        border: 3px solid #90A4AE;
     }
 
     .weight-display {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: bold;
         color: #1A237E;
         background: #E8EAF6;
-        padding: 2px 8px;
-        border-radius: 4px;
+        padding: 3px 10px;
+        border-radius: 6px;
         border: 1.5px solid #3F51B5;
         font-family: monospace;
     }
@@ -379,13 +344,17 @@
         font-weight: bold;
         color: #374151;
         margin-top: 4px;
+        background: white;
+        padding: 1px 6px;
+        border-radius: 8px;
+        border: 1px solid #E5E7EB;
     }
 
-    .baby-scale.active .scale-tray {
+    .checkup-table.active .table-tray {
         background: #FFF;
         border-color: #EF5350;
     }
-    .baby-scale.active .weight-display {
+    .checkup-table.active .weight-display {
         color: #EF5350;
         border-color: #EF5350;
         background: #FFEBEE;
