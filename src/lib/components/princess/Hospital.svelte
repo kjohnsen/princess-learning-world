@@ -1,6 +1,34 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
+    import { draggable } from "$lib/actions/draggable";
     import DoctorAvatar from "./DoctorAvatar.svelte";
+
+    export let scaleRatio = 1;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let doctorPos = { x: 500, y: 140 };
+
+    function handleDoctorDragStart(event: CustomEvent) {
+        isDragging = false;
+        startX = event.detail.x;
+        startY = event.detail.y;
+    }
+
+    function handleDoctorDrag(event: CustomEvent) {
+        doctorPos.x += event.detail.dx / scaleRatio;
+        doctorPos.y += event.detail.dy / scaleRatio;
+        if (Math.abs(event.detail.x - startX) > 5 || Math.abs(event.detail.y - startY) > 5) {
+            isDragging = true;
+        }
+    }
+
+    function handleDoctorClick() {
+        if (!isDragging) {
+            nextDialogue();
+        }
+    }
 
     // Dialogue text when talking to the doctor
     let doctorDialogue = "Hello! All four babies are doing wonderful today! Let's give them a check-up! 🩺";
@@ -99,14 +127,25 @@
     <!-- Floor -->
     <div class="floor"></div>
 
-    <!-- Doctor Section (Interactive) -->
-    <button class="doctor-wrapper" on:click={nextDialogue} aria-label="Talk to doctor">
+    <!-- Doctor Section (Interactive & Draggable) -->
+    <div 
+        class="doctor-wrapper" 
+        style="left: {doctorPos.x}px; top: {doctorPos.y}px;"
+        use:draggable
+        on:dragstart={handleDoctorDragStart}
+        on:dragmove={handleDoctorDrag}
+        on:click={handleDoctorClick}
+        on:keydown={(e) => e.key === 'Enter' && handleDoctorClick()}
+        role="button"
+        tabindex="0"
+        aria-label="Talk to doctor"
+    >
         <DoctorAvatar scale={0.6} />
         <div class="dialogue-bubble" in:fade>
             {doctorDialogue}
             <div class="bubble-arrow"></div>
         </div>
-    </button>
+    </div>
 </div>
 
 <style>
@@ -354,16 +393,20 @@
 
     .doctor-wrapper {
         position: absolute;
-        bottom: 50px;
-        right: 140px;
         background: none;
         border: none;
         z-index: 2;
-        cursor: pointer;
+        cursor: grab;
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .doctor-wrapper:active {
+        cursor: grabbing;
     }
 
     .doctor-wrapper:hover {

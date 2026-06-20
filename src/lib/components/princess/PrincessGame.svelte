@@ -35,21 +35,25 @@
 
     let activeTab = "dressup";
 
+    let containerWidth = 800;
+    $: scaleRatio = containerWidth ? Math.min(1, containerWidth / 800) : 1;
+    $: scaledHeight = 500 * scaleRatio;
+
     let princessPos = { x: 50, y: 350 };
     let princePos = { x: 150, y: 350 };
 
     function handlePrincessDrag(event: CustomEvent) {
-        princessPos.x += event.detail.dx;
-        princessPos.y += event.detail.dy;
+        princessPos.x += event.detail.dx / scaleRatio;
+        princessPos.y += event.detail.dy / scaleRatio;
     }
 
     function handlePrinceDrag(event: CustomEvent) {
-        princePos.x += event.detail.dx;
-        princePos.y += event.detail.dy;
+        princePos.x += event.detail.dx / scaleRatio;
+        princePos.y += event.detail.dy / scaleRatio;
     }
 
     function handleBabyDrag(event: CustomEvent, babyId: number) {
-        babiesStore.updatePosition(babyId, event.detail.dx, event.detail.dy);
+        babiesStore.updatePosition(babyId, event.detail.dx / scaleRatio, event.detail.dy / scaleRatio);
     }
 
     const tabs = [
@@ -103,7 +107,7 @@
     ];
 </script>
 
-<div class="game-world">
+<div class="game-world" bind:clientWidth={containerWidth}>
     <nav class="game-nav">
         {#each tabs as tab}
             <button
@@ -117,114 +121,116 @@
         {/each}
     </nav>
 
-    <div class="game-content">
-        {#if activeTab === "dressup"}
-            <div in:fade={{ duration: 300 }}>
-                <DressUp />
-            </div>
-        {:else if activeTab === "princedressup"}
-            <div in:fade={{ duration: 300 }}>
-                <PrinceDressUp />
-            </div>
-        {:else if activeTab === "babydressup"}
-            <div in:fade={{ duration: 300 }}>
-                <BabyDressUp />
-            </div>
-        {:else if activeTab === "hospital"}
-            <div in:fade={{ duration: 300 }}>
-                <Hospital />
-            </div>
-        {:else if activeTab === "garden"}
-            <div in:fade={{ duration: 300 }}>
-                <Garden />
-            </div>
-        {:else if activeTab === "kitchen"}
-            <div in:fade={{ duration: 300 }}>
-                <Kitchen />
-            </div>
-        {:else if activeTab === "petstore"}
-            <div in:fade={{ duration: 300 }}>
-                <PetStore />
-            </div>
-        {:else if activeTab === "bedroom"}
-            <div in:fade={{ duration: 300 }}>
-                <Bedroom />
-            </div>
-        {:else if activeTab === "castle"}
-            <div in:fade={{ duration: 300 }}>
-                <Castle />
-            </div>
-        {:else if activeTab === "grocerystore"}
-            <div in:fade={{ duration: 300 }}>
-                <GroceryStore />
-            </div>
-        {:else if activeTab === "wedding"}
-            <div in:fade={{ duration: 300 }}>
-                <Cathedral />
-            </div>
-        {:else if activeTab === "restaurant"}
-            <div in:fade={{ duration: 300 }}>
-                <Restaurant />
-            </div>
-        {/if}
-    </div>
+    <div class="game-content-wrapper" style="height: {scaledHeight}px;">
+        <div class="game-content" style="transform: scale({scaleRatio});">
+            {#if activeTab === "dressup"}
+                <div in:fade={{ duration: 300 }}>
+                    <DressUp />
+                </div>
+            {:else if activeTab === "princedressup"}
+                <div in:fade={{ duration: 300 }}>
+                    <PrinceDressUp />
+                </div>
+            {:else if activeTab === "babydressup"}
+                <div in:fade={{ duration: 300 }}>
+                    <BabyDressUp />
+                </div>
+            {:else if activeTab === "hospital"}
+                <div in:fade={{ duration: 300 }}>
+                    <Hospital {scaleRatio} />
+                </div>
+            {:else if activeTab === "garden"}
+                <div in:fade={{ duration: 300 }}>
+                    <Garden />
+                </div>
+            {:else if activeTab === "kitchen"}
+                <div in:fade={{ duration: 300 }}>
+                    <Kitchen />
+                </div>
+            {:else if activeTab === "petstore"}
+                <div in:fade={{ duration: 300 }}>
+                    <PetStore />
+                </div>
+            {:else if activeTab === "bedroom"}
+                <div in:fade={{ duration: 300 }}>
+                    <Bedroom />
+                </div>
+            {:else if activeTab === "castle"}
+                <div in:fade={{ duration: 300 }}>
+                    <Castle />
+                </div>
+            {:else if activeTab === "grocerystore"}
+                <div in:fade={{ duration: 300 }}>
+                    <GroceryStore />
+                </div>
+            {:else if activeTab === "wedding"}
+                <div in:fade={{ duration: 300 }}>
+                    <Cathedral />
+                </div>
+            {:else if activeTab === "restaurant"}
+                <div in:fade={{ duration: 300 }}>
+                    <Restaurant />
+                </div>
+            {/if}
 
-    <div
-        class="global-avatar"
-        style="left: {princessPos.x}px; top: {princessPos.y}px;"
-        use:draggable
-        on:dragmove={handlePrincessDrag}
-    >
-        <PrincessAvatar
-            skinTone={$princessState.skinTone}
-            dressId={$princessState.dress}
-            hairId={$princessState.hair}
-            hairCutId={$princessState.hairCut}
-            crownId={$princessState.crown}
-            makeup={$princessState.makeup}
-            shoeId={$princessState.shoe}
-            scale={0.45}
-        />
-    </div>
+            <div
+                class="global-avatar"
+                style="left: {princessPos.x}px; top: {princessPos.y}px;"
+                use:draggable
+                on:dragmove={handlePrincessDrag}
+            >
+                <PrincessAvatar
+                    skinTone={$princessState.skinTone}
+                    dressId={$princessState.dress}
+                    hairId={$princessState.hair}
+                    hairCutId={$princessState.hairCut}
+                    crownId={$princessState.crown}
+                    makeup={$princessState.makeup}
+                    shoeId={$princessState.shoe}
+                    scale={0.45}
+                />
+            </div>
 
-    <div
-        class="global-avatar prince-avatar-global"
-        style="left: {princePos.x}px; top: {princePos.y}px;"
-        use:draggable
-        on:dragmove={handlePrinceDrag}
-    >
-        <PrinceAvatar
-            skinTone={$princeState.skinTone}
-            hairId={$princeState.hair}
-            hairCutId={$princeState.hairCut}
-            shirtId={$princeState.shirt}
-            pantsId={$princeState.pants}
-            capeId={$princeState.cape}
-            crownId={$princeState.crown}
-            shoeId={$princeState.shoe}
-            scale={0.45}
-        />
-    </div>
+            <div
+                class="global-avatar prince-avatar-global"
+                style="left: {princePos.x}px; top: {princePos.y}px;"
+                use:draggable
+                on:dragmove={handlePrinceDrag}
+            >
+                <PrinceAvatar
+                    skinTone={$princeState.skinTone}
+                    hairId={$princeState.hair}
+                    hairCutId={$princeState.hairCut}
+                    shirtId={$princeState.shirt}
+                    pantsId={$princeState.pants}
+                    capeId={$princeState.cape}
+                    crownId={$princeState.crown}
+                    shoeId={$princeState.shoe}
+                    scale={0.45}
+                />
+            </div>
 
-    {#each $babiesStore as baby (baby.id)}
-        <div
-            class="global-avatar baby-avatar-global"
-            style="left: {baby.x}px; top: {baby.y}px;"
-            use:draggable
-            on:dragmove={(e) => handleBabyDrag(e, baby.id)}
-        >
-            <BabyAvatar
-                clothing={baby.clothing}
-                swaddleColor={baby.swaddleColor}
-                shoe={baby.shoe}
-                accessory={baby.accessory}
-                eyesClosed={baby.eyesClosed}
-                gender={baby.gender}
-                scale={0.4}
-            />
-            <span class="baby-name-label">{baby.name}</span>
+            {#each $babiesStore as baby (baby.id)}
+                <div
+                    class="global-avatar baby-avatar-global"
+                    style="left: {baby.x}px; top: {baby.y}px;"
+                    use:draggable
+                    on:dragmove={(e) => handleBabyDrag(e, baby.id)}
+                >
+                    <BabyAvatar
+                        clothing={baby.clothing}
+                        swaddleColor={baby.swaddleColor}
+                        shoe={baby.shoe}
+                        accessory={baby.accessory}
+                        eyesClosed={baby.eyesClosed}
+                        gender={baby.gender}
+                        scale={0.4}
+                    />
+                    <span class="baby-name-label">{baby.name}</span>
+                </div>
+            {/each}
         </div>
-    {/each}
+    </div>
 </div>
 
 <style>
@@ -235,6 +241,8 @@
         display: flex;
         flex-direction: column;
         gap: var(--spacing-lg);
+        user-select: none;
+        -webkit-user-select: none;
     }
 
     .game-nav {
@@ -278,14 +286,22 @@
         font-size: 1rem;
     }
 
-    .game-content {
+    .game-content-wrapper {
         background: white;
         border-radius: var(--radius-xl, 24px);
-        min-height: 500px; /* Ensure consistent height */
-        padding: var(--spacing-lg);
         box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
         position: relative;
         overflow: hidden;
+        width: 100%;
+    }
+
+    .game-content {
+        width: 800px;
+        height: 500px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
     }
 
     .global-avatar {
@@ -293,6 +309,8 @@
         z-index: 100;
         transform-origin: center center;
         pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
     :global(.global-avatar svg) {
