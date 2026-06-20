@@ -43,21 +43,21 @@
     let princePos = { x: 150, y: 350 };
 
     function handlePrincessDrag(event: CustomEvent) {
-        princessPos.x = Math.max(-50, Math.min(800 - 50, princessPos.x + event.detail.dx / scaleRatio));
-        princessPos.y = Math.max(-50, Math.min(500 - 50, princessPos.y + event.detail.dy / scaleRatio));
+        princessPos.x = Math.max(40, Math.min(800 - 40, princessPos.x + event.detail.dx / scaleRatio));
+        princessPos.y = Math.max(180, Math.min(500, princessPos.y + event.detail.dy / scaleRatio));
     }
 
     function handlePrinceDrag(event: CustomEvent) {
-        princePos.x = Math.max(-50, Math.min(800 - 50, princePos.x + event.detail.dx / scaleRatio));
-        princePos.y = Math.max(-50, Math.min(500 - 50, princePos.y + event.detail.dy / scaleRatio));
+        princePos.x = Math.max(40, Math.min(800 - 40, princePos.x + event.detail.dx / scaleRatio));
+        princePos.y = Math.max(180, Math.min(500, princePos.y + event.detail.dy / scaleRatio));
     }
 
     function handleBabyDrag(event: CustomEvent, babyId: number) {
         babiesStore.update(babies => {
             return babies.map(b => {
                 if (b.id === babyId) {
-                    const newX = Math.max(-30, Math.min(800 - 30, b.x + event.detail.dx / scaleRatio));
-                    const newY = Math.max(-30, Math.min(500 - 30, b.y + event.detail.dy / scaleRatio));
+                    const newX = Math.max(20, Math.min(800 - 20, b.x + event.detail.dx / scaleRatio));
+                    const newY = Math.max(60, Math.min(500, b.y + event.detail.dy / scaleRatio));
                     return { ...b, x: newX, y: newY };
                 }
                 return b;
@@ -184,7 +184,7 @@
 
             <div
                 class="global-avatar"
-                style="left: {princessPos.x}px; top: {princessPos.y}px;"
+                style="left: {princessPos.x}px; top: {princessPos.y}px; transform: translate(-50%, -90%) scale(0.45);"
                 use:draggable
                 on:dragmove={handlePrincessDrag}
             >
@@ -196,13 +196,13 @@
                     crownId={$princessState.crown}
                     makeup={$princessState.makeup}
                     shoeId={$princessState.shoe}
-                    scale={0.45}
+                    scale={1}
                 />
             </div>
 
             <div
                 class="global-avatar prince-avatar-global"
-                style="left: {princePos.x}px; top: {princePos.y}px;"
+                style="left: {princePos.x}px; top: {princePos.y}px; transform: translate(-50%, -90%) scale(0.45);"
                 use:draggable
                 on:dragmove={handlePrinceDrag}
             >
@@ -215,14 +215,14 @@
                     capeId={$princeState.cape}
                     crownId={$princeState.crown}
                     shoeId={$princeState.shoe}
-                    scale={0.45}
+                    scale={1}
                 />
             </div>
 
             {#each $babiesStore as baby (baby.id)}
                 <div
                     class="global-avatar baby-avatar-global"
-                    style="left: {baby.x}px; top: {baby.y}px;"
+                    style="left: {baby.x}px; top: {baby.y}px; transform: translate(-50%, -90%) scale(0.4);"
                     use:draggable
                     on:dragmove={(e) => handleBabyDrag(e, baby.id)}
                 >
@@ -233,7 +233,7 @@
                         accessory={baby.accessory}
                         eyesClosed={baby.eyesClosed}
                         gender={baby.gender}
-                        scale={0.4}
+                        scale={1}
                     />
                     <span class="baby-name-label">{baby.name}</span>
                 </div>
@@ -316,7 +316,6 @@
     .global-avatar {
         position: absolute;
         z-index: 100;
-        transform-origin: center center;
         pointer-events: none;
         user-select: none;
         -webkit-user-select: none;

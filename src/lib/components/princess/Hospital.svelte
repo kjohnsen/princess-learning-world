@@ -416,8 +416,8 @@
 
     .dialogue-bubble {
         position: absolute;
-        top: -120px;
-        left: -130px;
+        top: -85px;
+        left: -40px;
         width: 240px;
         background: white;
         border: 3px solid #00838F;
@@ -433,7 +433,7 @@
     .bubble-arrow {
         position: absolute;
         bottom: -15px;
-        right: 40px;
+        right: 75px;
         width: 0;
         height: 0;
         border-left: 12px solid transparent;
