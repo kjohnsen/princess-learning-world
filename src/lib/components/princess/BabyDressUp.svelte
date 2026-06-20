@@ -272,11 +272,7 @@
     }
 
     .preview-area {
-        background: radial-gradient(circle, #fff, #f3f4f6);
-        border-radius: var(--radius-lg);
         padding: var(--spacing-lg);
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
-        border: 4px solid white;
         flex: 1;
         min-width: 250px;
         display: flex;
@@ -313,10 +309,7 @@
     }
 
     .controls-area {
-        background: white;
         padding: var(--spacing-lg);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-lg);
         flex: 1.5;
         min-width: 320px;
         max-width: 450px;

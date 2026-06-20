@@ -224,8 +224,8 @@
         padding: 20px;
         background: #f8f9fa;
         border-radius: 20px;
-        height: 500px;
-        overflow-y: auto;
+        width: 100%;
+        min-height: 500px;
     }
 
     .header {

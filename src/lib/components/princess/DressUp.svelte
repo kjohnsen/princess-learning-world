@@ -362,18 +362,14 @@
     }
 
     .preview-area {
-        background: radial-gradient(circle, #fff, #f3f4f6);
-        border-radius: var(--radius-lg);
         padding: var(--spacing-lg);
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
-        border: 4px solid white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .controls-area {
-        background: white;
         padding: var(--spacing-lg);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-lg);
         width: 100%;
         max-width: 500px;
     }
