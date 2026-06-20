@@ -8,6 +8,7 @@
         princePants,
         princeShirts,
         princeState,
+        princeShoes,
     } from "$lib/stores/princeState";
     import { RotateCcw } from "lucide-svelte";
     import PrinceAvatar from "./PrinceAvatar.svelte";
@@ -37,6 +38,7 @@
             pantsId={$princeState.pants}
             capeId={$princeState.cape}
             crownId={$princeState.crown}
+            shoeId={$princeState.shoe}
         />
     </div>
 
@@ -176,6 +178,35 @@
                                 size={20}
                                 style="position: absolute; top: 12px; left: 12px; color: #888;"
                             />
+                        {/if}
+                    </button>
+                {/each}
+            </div>
+        </div>
+
+        <div class="category">
+            <h3>Shoes</h3>
+            <div class="options">
+                {#each princeShoes as shoe, i}
+                    {@const locked = getLockStatus("princeShoe", shoe.id)}
+                    <button
+                        class="color-btn {$princeState.shoe === i
+                            ? 'active'
+                            : ''} {locked ? 'locked' : ''}"
+                        style="background-color: {shoe.color}"
+                        on:click={() => {
+                            if (!locked) $princeState.shoe = i;
+                        }}
+                        aria-label="Select shoe {shoe.name}"
+                        disabled={locked}
+                    >
+                        {#if shoe.color === "transparent"}
+                            <RotateCcw
+                                size={20}
+                                style="position: absolute; top: 12px; left: 12px; color: #888;"
+                            />
+                        {:else if shoe.id === 3}
+                            <span style="font-size: 1.2rem; display: flex; align-items: center; justify-content: center; height: 100%;">👟</span>
                         {/if}
                     </button>
                 {/each}

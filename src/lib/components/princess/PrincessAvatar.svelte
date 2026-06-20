@@ -7,6 +7,7 @@
         lipsticks,
         polishes,
         shadows,
+        shoes,
     } from "$lib/stores/princessState";
     import { fade } from "svelte/transition";
 
@@ -17,6 +18,7 @@
     export let crownId = 0;
     export let makeup = { blush: 0, shadow: 0, lipstick: 0, polish: 0 };
     export let scale = 1;
+    export let shoeId = 0;
 
     // Helper to get item data safely
     $: currentDress = dresses.find((d) => d.id === dressId) || dresses[0];
@@ -29,6 +31,8 @@
         lipsticks.find((m) => m.id === makeup.lipstick) || lipsticks[0];
     $: currentPolish =
         polishes.find((m) => m.id === makeup.polish) || polishes[0];
+    $: currentShoe =
+        shoes.find((s) => s.id === shoeId) || shoes[0];
 </script>
 
 <div class="avatar-container" style="transform: scale({scale});">
@@ -156,6 +160,44 @@
                 stroke-width="5"
                 fill="none"
             />
+            {#if dressId === 5}
+                <!-- Red sash at waist -->
+                <path
+                    d="M93,220 Q125,235 157,220 L158,235 Q125,250 92,235 Z"
+                    fill="#EF4444"
+                />
+                <!-- Sash tie hanging down -->
+                <path
+                    d="M135,230 L125,320 L135,325 L145,230 Z"
+                    fill="#D32F2F"
+                />
+                
+                <!-- Red neck bandana -->
+                <path d="M100,122 L125,142 L150,122 Z" fill="#EF4444" />
+                <path d="M125,142 L120,155 L125,145 L130,155 Z" fill="#D32F2F" />
+            {/if}
+        {/if}
+
+        <!-- Shoes -->
+        {#if shoeId > 0}
+            {#if shoeId === 3}
+                <!-- San Fermin Alpargatas with ribbons wrapping ankles -->
+                <!-- Left Shoe Ribbons -->
+                <path d="M98,363 L112,371 M112,363 L98,371" stroke="#EF4444" stroke-width="2" />
+                <path d="M98,353 L112,361 M112,353 L98,361" stroke="#EF4444" stroke-width="2" />
+                <!-- Right Shoe Ribbons -->
+                <path d="M138,363 L152,371 M152,363 L138,371" stroke="#EF4444" stroke-width="2" />
+                <path d="M138,353 L152,361 M152,353 L138,361" stroke="#EF4444" stroke-width="2" />
+
+                <!-- Left Foot Shoe -->
+                <path d="M93,372 L117,372 L119,384 L91,384 Z" fill="#FFFFFF" stroke="#D32F2F" stroke-width="1" />
+                <!-- Right Foot Shoe -->
+                <path d="M133,372 L157,372 L159,384 L131,384 Z" fill="#FFFFFF" stroke="#D32F2F" stroke-width="1" />
+            {:else}
+                <!-- Normal Shoes -->
+                <path d="M93,372 L117,372 L119,384 L91,384 Z" fill={currentShoe.color} />
+                <path d="M133,372 L157,372 L159,384 L131,384 Z" fill={currentShoe.color} />
+            {/if}
         {/if}
 
         <!-- Hair (Front/Bangs) - Moved BEHIND face/crowns for visibility -->

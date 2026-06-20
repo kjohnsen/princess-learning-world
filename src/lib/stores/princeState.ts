@@ -8,6 +8,7 @@ export interface PrinceState {
     cape: number;
     crown: number;
     hairCut: number;
+    shoe: number;
 }
 
 const initialState: PrinceState = {
@@ -17,7 +18,8 @@ const initialState: PrinceState = {
     pants: 0,
     cape: 0,
     crown: 0,
-    hairCut: 0
+    hairCut: 0,
+    shoe: 0
 };
 
 function createPrinceState() {
@@ -62,6 +64,7 @@ export const princeShirts = [
     { id: 1, name: 'Red Tunic', color: '#EF4444', price: 50 },
     { id: 2, name: 'Green Tunic', color: '#10B981', price: 100 },
     { id: 3, name: 'Golden Armor', color: '#F59E0B', price: 150 },
+    { id: 4, name: 'San Fermin Shirt', color: '#FFFFFF', price: 50 },
 ];
 
 export const princePants = [
@@ -69,6 +72,7 @@ export const princePants = [
     { id: 1, name: 'Brown Pants', color: '#78350F', price: 40 },
     { id: 2, name: 'Black Pants', color: '#111827', price: 60 },
     { id: 3, name: 'White Leggings', color: '#F3F4F6', price: 80 },
+    { id: 4, name: 'San Fermin Pants', color: '#FFFFFF', price: 40 },
 ];
 
 export const princeCapes = [
@@ -83,4 +87,11 @@ export const princeCrowns = [
     { id: 1, name: 'None', color: 'transparent', price: 0 },
     { id: 2, name: 'Silver Crown', color: '#C0C0C0', price: 75 },
     { id: 3, name: 'Jeweled Crown', color: '#F59E0B', price: 150 },
+];
+
+export const princeShoes = [
+    { id: 0, name: 'None', color: 'transparent', price: 0 },
+    { id: 1, name: 'Brown Boots', color: '#5D4037', price: 20 },
+    { id: 2, name: 'Golden Boots', color: '#FFD700', price: 50 },
+    { id: 3, name: 'San Fermin Alpargatas', color: '#FFFFFF', ribbonColor: '#EF4444', price: 30 }
 ];

@@ -10,6 +10,7 @@
         polishes,
         princessState,
         shadows,
+        shoes,
     } from "$lib/stores/princessState";
     import { RotateCcw } from "lucide-svelte";
     import PrincessAvatar from "./PrincessAvatar.svelte";
@@ -41,6 +42,7 @@
             hairCutId={$princessState.hairCut}
             crownId={$princessState.crown}
             makeup={$princessState.makeup}
+            shoeId={$princessState.shoe}
         />
     </div>
 
@@ -290,6 +292,37 @@
                         aria-label="Select {polish.name}"
                         disabled={locked}
                     ></button>
+                {/each}
+            </div>
+        </div>
+
+        <div class="category">
+            <h3>Shoes</h3>
+            <div class="options">
+                <button
+                    class="option-btn {$princessState.shoe === 0 ? 'active' : ''}"
+                    on:click={() => ($princessState.shoe = 0)}
+                    aria-label="Remove shoes"
+                >
+                    <RotateCcw size={20} />
+                </button>
+                {#each shoes.slice(1) as s}
+                    {@const locked = getLockStatus("shoe", s.id)}
+                    <button
+                        class="color-btn {$princessState.shoe === s.id
+                            ? 'active'
+                            : ''} {locked ? 'locked' : ''}"
+                        style="background-color: {s.color}"
+                        on:click={() => {
+                            if (!locked) $princessState.shoe = s.id;
+                        }}
+                        aria-label="Select {s.name}"
+                        disabled={locked}
+                    >
+                        {#if s.id === 3}
+                            <span style="font-size: 1.2rem; display: flex; align-items: center; justify-content: center; height: 100%;">👟</span>
+                        {/if}
+                    </button>
                 {/each}
             </div>
         </div>

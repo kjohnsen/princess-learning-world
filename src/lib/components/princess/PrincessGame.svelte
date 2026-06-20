@@ -2,6 +2,14 @@
     import { draggable } from "$lib/actions/draggable";
     import { princessState } from "$lib/stores/princessState";
     import { princeState } from "$lib/stores/princeState";
+    import PrinceAvatar from "./PrinceAvatar.svelte";
+    import PrinceDressUp from "./PrinceDressUp.svelte";
+    import PrincessAvatar from "./PrincessAvatar.svelte";
+    import Restaurant from "./Restaurant.svelte";
+    import Hospital from "./Hospital.svelte";
+    import BabyDressUp from "./BabyDressUp.svelte";
+    import BabyAvatar from "./BabyAvatar.svelte";
+    import { babiesStore } from "$lib/stores/babyState";
     import {
         Castle as CastleIcon,
         Cat,
@@ -12,6 +20,8 @@
         ShoppingBag,
         Sparkles,
         Utensils,
+        Baby,
+        HeartPulse,
     } from "lucide-svelte";
     import { fade } from "svelte/transition";
     import Bedroom from "./Bedroom.svelte";
@@ -22,10 +32,6 @@
     import GroceryStore from "./GroceryStore.svelte";
     import Kitchen from "./Kitchen.svelte";
     import PetStore from "./PetStore.svelte";
-    import PrinceAvatar from "./PrinceAvatar.svelte";
-    import PrinceDressUp from "./PrinceDressUp.svelte";
-    import PrincessAvatar from "./PrincessAvatar.svelte";
-    import Restaurant from "./Restaurant.svelte";
 
     let activeTab = "dressup";
 
@@ -42,6 +48,10 @@
         princePos.y += event.detail.dy;
     }
 
+    function handleBabyDrag(event: CustomEvent, babyId: number) {
+        babiesStore.updatePosition(babyId, event.detail.dx, event.detail.dy);
+    }
+
     const tabs = [
         {
             id: "dressup",
@@ -54,6 +64,18 @@
             label: "Prince Dress Up",
             icon: Sparkles,
             color: "#3B82F6",
+        },
+        {
+            id: "babydressup",
+            label: "Baby Dress Up",
+            icon: Baby,
+            color: "#FF8DA1",
+        },
+        {
+            id: "hospital",
+            label: "Hospital",
+            icon: HeartPulse,
+            color: "#009688",
         },
         { id: "garden", label: "Garden", icon: Flower, color: "#4CAF50" },
         { id: "kitchen", label: "Kitchen", icon: Utensils, color: "#FF9800" },
@@ -104,6 +126,14 @@
             <div in:fade={{ duration: 300 }}>
                 <PrinceDressUp />
             </div>
+        {:else if activeTab === "babydressup"}
+            <div in:fade={{ duration: 300 }}>
+                <BabyDressUp />
+            </div>
+        {:else if activeTab === "hospital"}
+            <div in:fade={{ duration: 300 }}>
+                <Hospital />
+            </div>
         {:else if activeTab === "garden"}
             <div in:fade={{ duration: 300 }}>
                 <Garden />
@@ -152,6 +182,7 @@
             hairCutId={$princessState.hairCut}
             crownId={$princessState.crown}
             makeup={$princessState.makeup}
+            shoeId={$princessState.shoe}
             scale={0.45}
         />
     </div>
@@ -170,9 +201,30 @@
             pantsId={$princeState.pants}
             capeId={$princeState.cape}
             crownId={$princeState.crown}
+            shoeId={$princeState.shoe}
             scale={0.45}
         />
     </div>
+
+    {#each $babiesStore as baby (baby.id)}
+        <div
+            class="global-avatar baby-avatar-global"
+            style="left: {baby.x}px; top: {baby.y}px;"
+            use:draggable
+            on:dragmove={(e) => handleBabyDrag(e, baby.id)}
+        >
+            <BabyAvatar
+                clothing={baby.clothing}
+                swaddleColor={baby.swaddleColor}
+                shoe={baby.shoe}
+                accessory={baby.accessory}
+                eyesClosed={baby.eyesClosed}
+                gender={baby.gender}
+                scale={0.4}
+            />
+            <span class="baby-name-label">{baby.name}</span>
+        </div>
+    {/each}
 </div>
 
 <style>
@@ -254,5 +306,20 @@
 
     :global(.global-avatar:active svg *) {
         cursor: grabbing;
+    }
+
+    .baby-name-label {
+        display: block;
+        text-align: center;
+        font-size: 0.7rem;
+        font-weight: bold;
+        color: #374151;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid #E5E7EB;
+        padding: 1px 5px;
+        border-radius: var(--radius-sm, 6px);
+        margin-top: -12px;
+        pointer-events: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 </style>

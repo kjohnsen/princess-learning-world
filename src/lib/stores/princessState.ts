@@ -13,6 +13,7 @@ export interface PrincessState {
         polish: number;
     };
     hairCut: number;
+    shoe: number;
 }
 
 const initialState: PrincessState = {
@@ -27,7 +28,8 @@ const initialState: PrincessState = {
         lipstick: 0,
         polish: 0
     },
-    hairCut: 0
+    hairCut: 0,
+    shoe: 0
 };
 
 function createPrincessState() {
@@ -63,6 +65,7 @@ export const dresses = [
     { id: 2, name: 'Blue Sparkle', color: '#60A5FA', price: 50 },
     { id: 3, name: 'Golden Ball', color: '#FCD34D', price: 100 },
     { id: 4, name: 'Purple Royal', color: '#9C27B0', price: 150 },
+    { id: 5, name: 'San Fermin Gown', color: '#FFFFFF', price: 80 },
 ];
 
 export const hairStyles = [
@@ -108,4 +111,11 @@ export const polishes = [
     { id: 1, name: 'Pink', color: '#FF6B97', price: 20 },
     { id: 2, name: 'Crimson', color: '#DC143C', price: 20 },
     { id: 3, name: 'Teal', color: '#008080', price: 20 },
+];
+
+export const shoes = [
+    { id: 0, name: 'None', color: 'transparent', price: 0 },
+    { id: 1, name: 'Pink Slippers', color: '#FF6B97', price: 20 },
+    { id: 2, name: 'Golden Heels', color: '#FFD700', price: 50 },
+    { id: 3, name: 'San Fermin Alpargatas', color: '#FFFFFF', ribbonColor: '#EF4444', price: 30 }
 ];

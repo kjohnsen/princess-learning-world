@@ -5,6 +5,7 @@
         princeHairStyles,
         princePants,
         princeShirts,
+        princeShoes,
     } from "$lib/stores/princeState";
 
     export let scale = 1;
@@ -15,6 +16,7 @@
     export let pantsId = 0;
     export let capeId = 0;
     export let crownId = 0;
+    export let shoeId = 0;
 
     $: currentHair =
         princeHairStyles.find((h) => h.id === hairId) || princeHairStyles[0];
@@ -25,6 +27,8 @@
     $: currentCape = princeCapes.find((c) => c.id === capeId) || princeCapes[0];
     $: currentCrown =
         princeCrowns.find((c) => c.id === crownId) || princeCrowns[0];
+    $: currentShoe =
+        princeShoes.find((s) => s.id === shoeId) || princeShoes[0];
 </script>
 
 <div class="avatar-container" style="transform: scale({scale});">
@@ -54,11 +58,22 @@
                 d="M85,140 Q125,130 165,140 L160,250 L90,250 Z"
                 fill={currentShirt.color}
             />
-            <!-- Lighter blue tunic -->
-            <!-- Belt -->
-            <rect x="90" y="240" width="70" height="10" fill="#FCD34D" />
+            <!-- Belt / Sash -->
+            {#if shirtId === 4}
+                <!-- Red sash at waist -->
+                <rect x="90" y="235" width="70" height="15" fill="#EF4444" />
+                <path d="M100,240 L95,300 L102,305 L108,240 Z" fill="#D32F2F" />
+            {:else}
+                <!-- Default yellow belt -->
+                <rect x="90" y="240" width="70" height="10" fill="#FCD34D" />
+            {/if}
             <!-- Neck -->
             <rect x="110" y="100" width="30" height="40" fill={skinTone} />
+            {#if shirtId === 4}
+                <!-- Red neck bandana -->
+                <path d="M100,122 L125,142 L150,122 Z" fill="#EF4444" />
+                <path d="M125,142 L120,155 L125,145 L130,155 Z" fill="#D32F2F" />
+            {/if}
             <!-- Head -->
             <circle cx="125" cy="80" r="45" fill={skinTone} />
 
@@ -95,6 +110,28 @@
                 fill="none"
             />
         </g>
+
+        <!-- Shoes -->
+        {#if shoeId > 0}
+            {#if shoeId === 3}
+                <!-- San Fermin Alpargatas with ribbons wrapping ankles -->
+                <!-- Left Shoe Ribbons -->
+                <path d="M98,363 L112,371 M112,363 L98,371" stroke="#EF4444" stroke-width="2" />
+                <path d="M98,353 L112,361 M112,353 L98,361" stroke="#EF4444" stroke-width="2" />
+                <!-- Right Shoe Ribbons -->
+                <path d="M138,363 L152,371 M152,363 L138,371" stroke="#EF4444" stroke-width="2" />
+                <path d="M138,353 L152,361 M152,353 L138,361" stroke="#EF4444" stroke-width="2" />
+
+                <!-- Left Foot Shoe -->
+                <path d="M93,372 L117,372 L119,384 L91,384 Z" fill="#FFFFFF" stroke="#D32F2F" stroke-width="1" />
+                <!-- Right Foot Shoe -->
+                <path d="M133,372 L157,372 L159,384 L131,384 Z" fill="#FFFFFF" stroke="#D32F2F" stroke-width="1" />
+            {:else}
+                <!-- Normal Boots/Shoes -->
+                <path d="M93,370 L117,370 L119,384 L91,384 Z" fill={currentShoe.color} />
+                <path d="M133,370 L157,370 L159,384 L131,384 Z" fill={currentShoe.color} />
+            {/if}
+        {/if}
 
         <!-- Face -->
         <g>
