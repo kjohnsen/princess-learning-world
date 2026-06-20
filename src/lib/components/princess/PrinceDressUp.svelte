@@ -54,7 +54,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {hair.color}"
                         on:click={() => {
-                            if (!locked) $princeState.hair = i;
+                            if (!locked) {
+                                $princeState.hair = i;
+                                princeState.set($princeState);
+                            }
                         }}
                         aria-label="Select hair style {hair.name}"
                         disabled={locked}
@@ -73,7 +76,10 @@
                             ? 'active'
                             : ''} {locked ? 'locked' : ''}"
                         on:click={() => {
-                            if (!locked) $princeState.hairCut = i;
+                            if (!locked) {
+                                $princeState.hairCut = i;
+                                princeState.set($princeState);
+                            }
                         }}
                         aria-label="Select hair cut {cut.name}"
                         disabled={locked}
@@ -101,7 +107,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {shirt.color}"
                         on:click={() => {
-                            if (!locked) $princeState.shirt = i;
+                            if (!locked) {
+                                $princeState.shirt = i;
+                                princeState.set($princeState);
+                            }
                         }}
                         aria-label="Select shirt {shirt.name}"
                         disabled={locked}
@@ -121,7 +130,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {pants.color}"
                         on:click={() => {
-                            if (!locked) $princeState.pants = i;
+                            if (!locked) {
+                                $princeState.pants = i;
+                                princeState.set($princeState);
+                            }
                         }}
                         aria-label="Select pants {pants.name}"
                         disabled={locked}
@@ -141,7 +153,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {cape.color}"
                         on:click={() => {
-                            if (!locked) $princeState.cape = i;
+                            if (!locked) {
+                                $princeState.cape = i;
+                                princeState.set($princeState);
+                            }
                         }}
                         aria-label="Select cape {cape.name}"
                         disabled={locked}
@@ -168,7 +183,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {crown.color}"
                         on:click={() => {
-                            if (!locked) $princeState.crown = i;
+                            if (!locked) {
+                                $princeState.crown = i;
+                                princeState.set($princeState);
+                            }
                         }}
                         aria-label="Select crown {crown.name}"
                         disabled={locked}
@@ -195,7 +213,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {shoe.color}"
                         on:click={() => {
-                            if (!locked) $princeState.shoe = i;
+                            if (!locked) {
+                                $princeState.shoe = i;
+                                princeState.set($princeState);
+                            }
                         }}
                         aria-label="Select shoe {shoe.name}"
                         disabled={locked}

@@ -58,7 +58,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {hair.color}"
                         on:click={() => {
-                            if (!locked) $princessState.hair = i;
+                            if (!locked) {
+                                $princessState.hair = i;
+                                princessState.set($princessState);
+                            }
                         }}
                         aria-label="Select hair style {hair.name}"
                         disabled={locked}
@@ -77,7 +80,10 @@
                             ? 'active'
                             : ''} {locked ? 'locked' : ''}"
                         on:click={() => {
-                            if (!locked) $princessState.hairCut = i;
+                            if (!locked) {
+                                $princessState.hairCut = i;
+                                princessState.set($princessState);
+                            }
                         }}
                         aria-label="Select hair cut {cut.name}"
                         disabled={locked}
@@ -101,7 +107,10 @@
                     class="option-btn {$princessState.dress === 0
                         ? 'active'
                         : ''}"
-                    on:click={() => ($princessState.dress = 0)}
+                    on:click={() => {
+                        $princessState.dress = 0;
+                        princessState.set($princessState);
+                    }}
                     aria-label="Remove dress"
                 >
                     <RotateCcw size={20} />
@@ -114,7 +123,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {dress.color}"
                         on:click={() => {
-                            if (!locked) $princessState.dress = dress.id;
+                            if (!locked) {
+                                $princessState.dress = dress.id;
+                                princessState.set($princessState);
+                            }
                         }}
                         aria-label="Select dress color {dress.name}"
                         disabled={locked}
@@ -130,7 +142,10 @@
                     class="option-btn {$princessState.crown === 0
                         ? 'active'
                         : ''}"
-                    on:click={() => ($princessState.crown = 0)}
+                    on:click={() => {
+                        $princessState.crown = 0;
+                        princessState.set($princessState);
+                    }}
                     aria-label="Remove crown"
                 >
                     <RotateCcw size={20} />
@@ -143,7 +158,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {crown.color}"
                         on:click={() => {
-                            if (!locked) $princessState.crown = crown.id;
+                            if (!locked) {
+                                $princessState.crown = crown.id;
+                                princessState.set($princessState);
+                            }
                         }}
                         aria-label="Select {crown.name}"
                         disabled={locked}
@@ -301,7 +319,10 @@
             <div class="options">
                 <button
                     class="option-btn {$princessState.shoe === 0 ? 'active' : ''}"
-                    on:click={() => ($princessState.shoe = 0)}
+                    on:click={() => {
+                        $princessState.shoe = 0;
+                        princessState.set($princessState);
+                    }}
                     aria-label="Remove shoes"
                 >
                     <RotateCcw size={20} />
@@ -314,7 +335,10 @@
                             : ''} {locked ? 'locked' : ''}"
                         style="background-color: {s.color}"
                         on:click={() => {
-                            if (!locked) $princessState.shoe = s.id;
+                            if (!locked) {
+                                $princessState.shoe = s.id;
+                                princessState.set($princessState);
+                            }
                         }}
                         aria-label="Select {s.name}"
                         disabled={locked}

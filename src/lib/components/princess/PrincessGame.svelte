@@ -43,17 +43,26 @@
     let princePos = { x: 150, y: 350 };
 
     function handlePrincessDrag(event: CustomEvent) {
-        princessPos.x += event.detail.dx / scaleRatio;
-        princessPos.y += event.detail.dy / scaleRatio;
+        princessPos.x = Math.max(-50, Math.min(800 - 50, princessPos.x + event.detail.dx / scaleRatio));
+        princessPos.y = Math.max(-50, Math.min(500 - 50, princessPos.y + event.detail.dy / scaleRatio));
     }
 
     function handlePrinceDrag(event: CustomEvent) {
-        princePos.x += event.detail.dx / scaleRatio;
-        princePos.y += event.detail.dy / scaleRatio;
+        princePos.x = Math.max(-50, Math.min(800 - 50, princePos.x + event.detail.dx / scaleRatio));
+        princePos.y = Math.max(-50, Math.min(500 - 50, princePos.y + event.detail.dy / scaleRatio));
     }
 
     function handleBabyDrag(event: CustomEvent, babyId: number) {
-        babiesStore.updatePosition(babyId, event.detail.dx / scaleRatio, event.detail.dy / scaleRatio);
+        babiesStore.update(babies => {
+            return babies.map(b => {
+                if (b.id === babyId) {
+                    const newX = Math.max(-30, Math.min(800 - 30, b.x + event.detail.dx / scaleRatio));
+                    const newY = Math.max(-30, Math.min(500 - 30, b.y + event.detail.dy / scaleRatio));
+                    return { ...b, x: newX, y: newY };
+                }
+                return b;
+            });
+        });
     }
 
     const tabs = [
@@ -291,7 +300,7 @@
         border-radius: var(--radius-xl, 24px);
         box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
         position: relative;
-        overflow: hidden;
+        overflow: visible;
         width: 100%;
     }
 
