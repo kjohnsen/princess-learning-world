@@ -39,7 +39,8 @@
 
     let containerWidth = 800;
     $: scaleRatio = containerWidth ? Math.min(1, containerWidth / 800) : 1;
-    $: scaledHeight = 500 * scaleRatio;
+    let contentHeight = 500;
+    $: scaledHeight = Math.max(500, contentHeight) * scaleRatio;
 
     let princessPos = { x: 50, y: 350 };
     let princePos = { x: 150, y: 350 };
@@ -139,7 +140,7 @@
     </nav>
 
     <div class="game-content-wrapper" style="height: {scaledHeight}px;">
-        <div class="game-content" style="transform: scale({scaleRatio});">
+        <div class="game-content" style="transform: scale({scaleRatio});" bind:clientHeight={contentHeight}>
             {#if activeTab === "dressup"}
                 <div in:fade={{ duration: 300 }}>
                     <DressUp />
@@ -319,7 +320,7 @@
 
     .game-content {
         width: 800px;
-        height: 500px;
+        min-height: 500px;
         position: absolute;
         top: 0;
         left: 0;
