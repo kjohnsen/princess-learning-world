@@ -18,6 +18,7 @@
         Coffee,
         Flower,
         Moon,
+        School,
         ShoppingBag,
         Sparkles,
         Utensils,
@@ -34,6 +35,7 @@
     import GroceryStore from "./GroceryStore.svelte";
     import Kitchen from "./Kitchen.svelte";
     import PetStore from "./PetStore.svelte";
+    import Schoolroom from "./Schoolroom.svelte";
 
     let activeTab = "dressup";
 
@@ -108,6 +110,7 @@
             icon: ShoppingBag,
             color: "#00BCD4",
         },
+        { id: "schoolroom", label: "School", icon: School, color: "#40E0D0" },
         { id: "castle", label: "Castle", icon: CastleIcon, color: "#9C27B0" },
         { id: "bedroom", label: "Bedroom", icon: Moon, color: "#673AB7" },
         {
@@ -184,6 +187,10 @@
             {:else if activeTab === "grocerystore"}
                 <div in:fade={{ duration: 300 }}>
                     <GroceryStore />
+                </div>
+            {:else if activeTab === "schoolroom"}
+                <div in:fade={{ duration: 300 }}>
+                    <Schoolroom {scaleRatio} />
                 </div>
             {:else if activeTab === "wedding"}
                 <div in:fade={{ duration: 300 }}>
